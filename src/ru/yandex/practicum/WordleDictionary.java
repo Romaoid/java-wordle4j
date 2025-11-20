@@ -11,4 +11,8 @@ public class WordleDictionary {
 
     private List<String> words;
 
+    public WordleDictionary() {
+        words = WordleDictionaryLoader.take(5);
+    }
+
 }
