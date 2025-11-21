@@ -15,4 +15,16 @@ public class WordleDictionary {
         words = WordleDictionaryLoader.take(5);
     }
 
+    public WordleDictionary(int letters) {
+        words = WordleDictionaryLoader.take(letters);
+    }
+
+    public boolean checkWord(String word){
+        return words.contains(word);
+    }
+
+
+    public List<String> getWords() {
+        return words;
+    }
 }
