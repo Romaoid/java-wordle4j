@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class WordleDictionaryLoader {
 
-    public static ArrayList<String> take(int letters) {
+    public static ArrayList<String> take(int letters) throws FileNotFoundException, IOException {
         ArrayList<String> buffer = new ArrayList<>();
         {
             try (BufferedReader dictionary =
@@ -19,13 +19,13 @@ public class WordleDictionaryLoader {
                 while (dictionary.ready()) {
                     String word = dictionary.readLine();
                     if (word.trim().length() == letters) {
-                        buffer.add(word.toLowerCase());
+                        buffer.add(word.toLowerCase().replace("ё", "е"));
                     }
                 }
             } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                throw new FileNotFoundException("[ERROR] Файл \"words_ru.txt\" не найден!");
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IOException();
             }
         }
         return buffer;

@@ -1,5 +1,8 @@
 package ru.yandex.practicum;
 
+import Exeptions.InvalidInputException;
+import Exeptions.LimitException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,33 +22,33 @@ import java.util.Random;
 public class WordleGame {
 
     private final String answer;
+    private final int rounds;
     private int steps;
-    private int rounds;
     private WordleDictionary dictionary;
     private List<String> hintList;
     private final int letters;
 
-    public WordleGame(int steps, int letters) {
+    public WordleGame(int rounds, int letters) throws IOException {
         Random random = new Random();
-        this.steps = steps;
-        rounds = 1;
+        this.rounds = rounds;
+        steps = 1;
         this.letters = letters;
         dictionary = new WordleDictionary(letters);
-        hintList = dictionary.getWords();
+        hintList = new ArrayList<>(dictionary.getWords());
         this.answer = dictionary.getWords().get(random.nextInt(dictionary.getWords().size()));
     }
 
-    public WordleGame() {
+    public WordleGame() throws IOException {
         Random random = new Random();
-        steps = 6;
-        rounds = 1;
+        rounds = 6;
+        steps = 1;
         letters = 5;
         dictionary = new WordleDictionary();
-        hintList = dictionary.getWords();
+        hintList = new ArrayList<>(dictionary.getWords());
         answer = dictionary.getWords().get(random.nextInt(dictionary.getWords().size()));
     }
 
-    private String giveAHint(String word) {
+    public String giveAHint(String word) {
         StringBuilder hint = new StringBuilder();
         for (int i = 0; i < word.length(); i++) {
             String letter = word.substring(i, i + 1);
@@ -63,7 +66,7 @@ public class WordleGame {
         return hint.toString();
     }
 
-    private void updateHintList(String letter, int position, String key){
+    private void updateHintList(String letter, int position, String key) {
         switch (key) {
             case "-": {
                 hintList.removeIf(word -> word.contains(letter));
@@ -85,40 +88,60 @@ public class WordleGame {
         return hintList.get(random.nextInt(hintList.size()));
     }
 
-    public String checkAnswer(String word){
+    public int checkAnswer(String word) throws InvalidInputException, LimitException {
         if (word.equals(answer)) {
-            return "Ура! Вы отгадали в " + rounds + "м раунде!";
+            return 1;
         }
 
-        if (isWord(word)) {
-            setRounds();
-            return  String.format("%s\nRound %d/%d:", giveAHint(word), getRounds(), getSteps());
-        }
-            return "testerror";
+        validateInput(word);
+        setSteps();
+        return 0;
     }
 
-    public boolean isWord(String word) {
-        if (word.isBlank()) {
-            return false;//"Слово должно быть из " + letters + " русских букв";//пустое слово
-        } else if (word.length() != letters) {
-            return false;//меньше больше букв
-        } else if (!(word.matches("[а-я]+"))) {
-            return false;//не русские буквы или прочие символы
+    private void validateInput(String word) {
+        if (word.isBlank() || (!(word.matches("[а-я]+")))) {
+            throw new InvalidInputException("Некорректный ввод: введены символы, цифры или некорректные буквы");
         }
-        return dictionary.checkWord(word);
+
+        if (word.length() > this.letters) {
+            throw new InvalidInputException("Некорректный ввод: Ведено больше " + this.letters + " букв");
+        }
+
+        if (word.length() < this.letters) {
+            throw new InvalidInputException("Некорректный ввод: Ведено меньше " + this.letters + " букв");
+        }
+
+        if (!(dictionary.getWords().contains(word))) {
+            throw new InvalidInputException("Слова нет в словаре:" +
+                    " Если данное слово существует обратитесь в поддержку");
+        }
     }
 
-    public void congratulate() {} // заменить на коды, логику проверки перенести сюда
+    public void setSteps() {
+        this.steps++;
+        if (steps > rounds) {
+            throw new LimitException("Превышен лимит попыток, увы, ты бился как лев.\n" +
+                    "Загаданное слово: " + this.answer);
+        }
+    }
 
-    public void setRounds() {
-        this.rounds++;
+    public int getRounds() {
+        return rounds;
     }
 
     public int getSteps() {
         return steps;
     }
 
-    public int getRounds() {
-        return rounds;
+    public String getAnswer() {
+        return answer;
+    }
+
+    public int getLetters() {
+        return letters;
+    }
+
+    public List<String> getHintList() {
+        return hintList;
     }
 }

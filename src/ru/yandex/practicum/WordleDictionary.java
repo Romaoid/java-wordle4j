@@ -1,5 +1,6 @@
 package ru.yandex.practicum;
 
+import java.io.IOException;
 import java.util.List;
 
 /*
@@ -11,18 +12,13 @@ public class WordleDictionary {
 
     private List<String> words;
 
-    public WordleDictionary() {
+    public WordleDictionary() throws IOException {
         words = WordleDictionaryLoader.take(5);
     }
 
-    public WordleDictionary(int letters) {
+    public WordleDictionary(int letters) throws IOException {
         words = WordleDictionaryLoader.take(letters);
     }
-
-    public boolean checkWord(String word){
-        return words.contains(word);
-    }
-
 
     public List<String> getWords() {
         return words;
