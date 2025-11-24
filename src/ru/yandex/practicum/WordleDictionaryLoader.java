@@ -13,7 +13,6 @@ public class WordleDictionaryLoader {
 
     public static ArrayList<String> take(int letters, String fileName) throws FileNotFoundException, IOException {
         ArrayList<String> buffer = new ArrayList<>();
-        {
             try (BufferedReader dictionary =
                          new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))) {
                 while (dictionary.ready()) {
@@ -23,11 +22,10 @@ public class WordleDictionaryLoader {
                     }
                 }
             } catch (FileNotFoundException e) {
-                throw new FileNotFoundException("[ERROR] Файл " + fileName +" не найден!");
+                throw new FileNotFoundException("[ERROR] Файл " + fileName + " не найден!");
             } catch (IOException e) {
                 throw new IOException();
             }
-        }
         return buffer;
     }
 }
