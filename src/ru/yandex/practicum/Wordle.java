@@ -1,7 +1,7 @@
 package ru.yandex.practicum;
 
-import Exeptions.InvalidInputException;
-import Exeptions.LimitException;
+import exeptions.InvalidInputException;
+import exeptions.LimitException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -31,7 +31,7 @@ public class Wordle {
         try {
             startLog();
             game = new WordleGame();
-        } catch(Throwable throwable) {
+        } catch (Throwable throwable) {
             System.err.println("Непредвиденная ошибка!");
             System.err.println("Обратитесь в поддержку.");
             throwable.printStackTrace(systemLogger);
