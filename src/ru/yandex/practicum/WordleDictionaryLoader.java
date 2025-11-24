@@ -11,11 +11,11 @@ import java.util.ArrayList;
  */
 public class WordleDictionaryLoader {
 
-    public static ArrayList<String> take(int letters) throws FileNotFoundException, IOException {
+    public static ArrayList<String> take(int letters, String fileName) throws FileNotFoundException, IOException {
         ArrayList<String> buffer = new ArrayList<>();
         {
             try (BufferedReader dictionary =
-                         new BufferedReader(new FileReader("words_ru.txt", StandardCharsets.UTF_8))) {
+                         new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8))) {
                 while (dictionary.ready()) {
                     String word = dictionary.readLine();
                     if (word.trim().length() == letters) {
@@ -23,7 +23,7 @@ public class WordleDictionaryLoader {
                     }
                 }
             } catch (FileNotFoundException e) {
-                throw new FileNotFoundException("[ERROR] Файл \"words_ru.txt\" не найден!");
+                throw new FileNotFoundException("[ERROR] Файл " + fileName +" не найден!");
             } catch (IOException e) {
                 throw new IOException();
             }

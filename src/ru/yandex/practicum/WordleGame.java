@@ -28,12 +28,12 @@ public class WordleGame {
     private List<String> hintList;
     private final int letters;
 
-    public WordleGame(int rounds, int letters) throws IOException {
+    public WordleGame(int rounds, int letters, String dictionaryFileName) throws IOException {
         Random random = new Random();
         this.rounds = rounds;
         steps = 1;
         this.letters = letters;
-        dictionary = new WordleDictionary(letters);
+        dictionary = new WordleDictionary(letters, dictionaryFileName);
         hintList = new ArrayList<>(dictionary.getWords());
         this.answer = dictionary.getWords().get(random.nextInt(dictionary.getWords().size()));
     }
@@ -53,7 +53,7 @@ public class WordleGame {
         for (int i = 0; i < word.length(); i++) {
             String letter = word.substring(i, i + 1);
             if (answer.contains(letter)) {
-                if (answer.indexOf(letter) == i) {
+                if (answer.charAt(i) == letter.charAt(0)) {
                     hint.append("+");
                 } else {
                     hint.append("^");

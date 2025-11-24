@@ -35,7 +35,8 @@ public class Wordle {
             System.err.println("Непредвиденная ошибка!");
             System.err.println("Обратитесь в поддержку.");
             throwable.printStackTrace(systemLogger);
-            closeLog();
+            closeLog(gameLogger);
+            closeLog(systemLogger);
             System.exit(1);
         }
 
@@ -48,7 +49,7 @@ public class Wordle {
                 "Да начнется игра!"
         );
         try {
-            while (true) { //(code != 1) || (code != -1)
+            while (true) {
                 System.out.println(game.getSteps() + " / " + game.getRounds());
 
                 Scanner scanner = new Scanner(System.in);
@@ -87,8 +88,13 @@ public class Wordle {
         } catch (LimitException exception) {
             System.out.println(exception.getMessage());
             gameLogger.println("GameOver. Lose.");
+        } catch (Throwable throwable) {
+            System.err.println("Непредвиденная ошибка!");
+            gameLogger.println("GameOver whit error.");
+            throwable.printStackTrace(systemLogger);
         } finally {
-            closeLog();
+            closeLog(gameLogger);
+            closeLog(systemLogger);
         }
 
     }
@@ -110,10 +116,8 @@ public class Wordle {
     public static void startLog() throws IOException {
         final String HOME = System.getProperty("user.dir");
 
-        if (Files.exists(Paths.get(HOME, "logs"))) {
-            Path logDir = Paths.get(HOME, "logs");
-        } else {
-            Path logDir = Files.createDirectory(Paths.get(HOME, "logs"));
+        if (!(Files.exists(Paths.get(HOME, "logs")))) {
+            Files.createDirectory(Paths.get(HOME, "logs"));
         }
 
         Path systemLog = Paths.get(HOME, "logs", "systemLog.txt");
@@ -143,12 +147,9 @@ public class Wordle {
         );
     }
 
-    public static void closeLog() {
-        if (systemLogger != null) {
-            systemLogger.close();
-        }
-        if (gameLogger != null) {
-            gameLogger.close();
+    public static void closeLog(PrintWriter logger) {
+        if (logger != null) {
+            logger.close();
         }
     }
 }
