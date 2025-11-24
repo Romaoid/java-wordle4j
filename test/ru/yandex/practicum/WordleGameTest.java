@@ -1,7 +1,7 @@
 package ru.yandex.practicum;
 
-import Exeptions.InvalidInputException;
-import Exeptions.LimitException;
+import exeptions.InvalidInputException;
+import exeptions.LimitException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;

@@ -1,7 +1,7 @@
 package ru.yandex.practicum;
 
-import Exeptions.InvalidInputException;
-import Exeptions.LimitException;
+import exeptions.InvalidInputException;
+import exeptions.LimitException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
